@@ -22,7 +22,7 @@ npm install -g gulp
 then:
 
 ```
-npm install
+yarn
 ```
 
 ```
