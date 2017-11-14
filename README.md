@@ -2,6 +2,15 @@
 
 This project aims to explore Component architecture in AngularJS
 
+# Install Yarn
+
+MAC
+```
+brew install yarn
+```
+
+If your OS is not MAC, follow [instructions](https://yarnpkg.com/lang/en/docs/install/) for other OS.
+
 # Run Dev
 
 Install `gulp` globally:
