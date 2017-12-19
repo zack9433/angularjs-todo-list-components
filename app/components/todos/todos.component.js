@@ -1,59 +1,74 @@
-import angular from 'angular';
-import {TodoFormComponent} from '../todo-form/todo-form.component';
-import {TodoListComponent} from '../todo-list/todo-list.component';
-
-const TodosComponent = {
-
+import * as todoActions from '../statement/todo.list.action';
+import { bindActionCreators } from 'redux';
+export const TodosComponent = {
     selector: 'todos',
     template: `
-        <div class="row">
-    		<h1 class="text-center">{{$ctrl.title}}</h1>
-            <todo-form on-new-element="$ctrl.addNewElement($event)"></todo-form>
-            <hr/>
-    		<todo-list todos="$ctrl.todoList" on-done="$ctrl.markDone($event)" on-undone="$ctrl.markUndone($event)"></todo-list>
+        <div layout="column" layout-fill>
+            <md-toolbar class="custom">
+                <h1 class="text-center app-list-title">{{$ctrl.title}}</h1>
+            </md-toolbar>
+            <div class="container">
+            <todo-form add-todo-callback="$ctrl.addTodoToService($event)"></todo-form>
+            <todo-list todos="$ctrl.data.todos"
+                on-update-callback="$ctrl.updateText($event)"
+                on-done-callback="$ctrl.updateDone($event)"
+                on-remove-callback="$ctrl.removeTodoFromService($event)">
+            </todo-list>
+            </div>
     	</div>
     `,
     controller: class TodosController {
-
         /* @ngInject */
-        constructor($log, TodoListService) {
-            this._console = $log;
+        constructor($scope, $log, $ngRedux, TodoListService) {
             this.title = 'TodoApp';
+            this._scope = $scope;
+            this._console = $log;
+            this._redux = $ngRedux;
             this._service = TodoListService;
-            this._service.getAll()
-                .then((todos) => this.todoList = todos);
         }
 
         $onInit() {
-            this._console.log('Todos initialized');
+            // Bind actions with an object.
+            this.actionCreator = bindActionCreators(todoActions, this._redux.dispatch);
+            this.unsubscribe = this._redux.connect(
+                this.mapStateToThis,
+                this.actionCreator
+            )(this);
+
+            this._service.getAll().then(todos => {
+                this.actionCreator.loadTodos(todos);
+            });
         }
 
-        addNewElement(todoLabel) {
-            const todo = {id: this.todoList.length + 1, text: todoLabel, done: false};
-            this._console.log(todo);
-            this._service.store(todo)
-                .then((t) => {
-                    this.todoList.push(t);
-                })
-                .catch(alert);
+        mapStateToThis(state) {
+            return {
+                data: state.listReducer
+            };
         }
 
-        markDone(todo) {
-            todo.done = true;
-            this._service.update(todo);
+        addTodoToService(event) {
+            const todo = {
+                id: this.data.todos.length + 1,
+                text: event.text,
+                done: false
+            };
+            this.actionCreator.addTodo(todo);
+            this._service.store(todo);
         }
 
-        markUndone(todo) {
-            todo.done = false;
-            this._service.update(todo);
+        updateDone(event) {
+            this.actionCreator.updateTodoDone(event);
+            this._service.storeAllTodo(this.data.todos);
+        }
+
+        updateText(event) {
+            this.actionCreator.updateTodoText(event);
+            this._service.storeAllTodo(this.data.todos);
+        }
+
+        removeTodoFromService(event) {
+            this.actionCreator.removeTodo(event);
+            this._service.storeAllTodo(this.data.todos);
         }
     }
-
 };
-
-angular.module('todos', [])
-    .component(TodoFormComponent.selector, TodoFormComponent)
-    .component(TodoListComponent.selector, TodoListComponent)
-    .component(TodosComponent.selector, TodosComponent);
-
-

@@ -23,11 +23,21 @@ module.exports = {
             },
             {
                 test: /.html$/,
-                loader: 'ngtemplate?relativeTo=' + __dirname +'/app!html?root=' + __dirname + '/app'
+                loader:
+                    'ngtemplate?relativeTo=' +
+                    __dirname +
+                    '/app!html?root=' +
+                    __dirname +
+                    '/app'
             },
             {
                 test: /\.scss$/,
-                loaders: ['style', 'css?root=' + __dirname + '/app', 'autoprefixer-loader?browsers=last 2 versions', 'sass'],
+                loaders: [
+                    'style',
+                    'css?root=' + __dirname + '/app',
+                    'autoprefixer-loader?browsers=last 2 versions',
+                    'sass'
+                ]
             },
             {
                 test: /\.png$/,
@@ -39,13 +49,16 @@ module.exports = {
             },
             {
                 test: /\.(ttf|eot|svg|woff(2)?)(\?[a-z0-9]+)?$/,
-                loader: 'file-loader',
+                loader: 'file-loader'
             }
         ]
     },
     plugins: [
         new webpack.optimize.DedupePlugin(),
-        new webpack.optimize.UglifyJsPlugin({ minimize: true, output: { comments: false }}),
+        new webpack.optimize.UglifyJsPlugin({
+            minimize: true,
+            output: { comments: false }
+        }),
         new webpack.ProvidePlugin({
             $: 'jquery',
             jQuery: 'jquery',
@@ -60,7 +73,7 @@ module.exports = {
         failOnError: true
     },
     sassLoader: {
-        includePaths: [path.resolve(__dirname, "./app")]
+        includePaths: [path.resolve(__dirname, './app')]
     },
     devtool: '#source-map'
 };

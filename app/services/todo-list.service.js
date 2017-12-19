@@ -9,13 +9,13 @@ function storeAll(todos) {
 }
 
 export default class TodoListService {
-
     /* @ngInject */
     constructor($log, $q) {
         this._console = $log;
         // used to simulate http promise
         this._q = $q;
         getAllStored.bind(this);
+        storeAll.bind(this);
     }
 
     store(todo) {
@@ -26,13 +26,21 @@ export default class TodoListService {
         return this._q.resolve(todo);
     }
 
+    storeAllTodo(todos) {
+        storeAll(todos);
+    }
+
+    remove(todos) {
+        storeAll(todos);
+    }
+
     getAll() {
         return this._q.resolve(getAllStored());
     }
 
     update(todo) {
         this._console.log('Update ' + todo.id);
-        const todos = getAllStored().map((t) => t.id === todo.id ? todo : t);
+        const todos = getAllStored().map(t => (t.id === todo.id ? todo : t));
         storeAll(todos);
         return this._q.resolve(todo);
     }

@@ -1,0 +1,13 @@
+<form name="todoForm">
+    <div class="row">
+    <div class="col-xs-10">
+      <md-input-container class = "md-block">
+      <label>Add Todo</label>
+      <input type="text" name="todoText" ng-model="$ctrl.todoText" required>
+      </md-input-container>
+   </div>
+      <div class="col-xs-2" align="center">
+          <md-button class="md-primary" ng-click="$ctrl.addTodo()" ng-disabled="todoForm.todoText.$invalid">Add To List</md-button>
+      </div>
+    </div>
+  </form>

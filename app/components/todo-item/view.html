@@ -1,0 +1,16 @@
+<md-list-item class="md-1-line underline">
+    <span class="col-xs-1" ng-class="{'task-done': $ctrl.todo.done}">{{$ctrl.todo.id}}</span>
+    <span class="col-xs-9" ng-class="{'task-done': $ctrl.todo.done}" ng-show="!$ctrl.editable">{{$ctrl.todo.text}}</span>
+    <span class="col-xs-9" ng-show="$ctrl.editable">
+        <input class="form-control" ng-model="$ctrl.todo.text">
+    </span>
+    <span class="col-xs-1">
+        <md-button class="md-primary" ng-click="$ctrl.updateDone()" ng-show="!$ctrl.todo.done">Done</md-button>
+        <md-button class="md-primary" ng-click="$ctrl.updateDone()" ng-show="$ctrl.todo.done">Redo</md-button>
+    </span>
+    <span class="col-xs-1">
+        <md-button class="md-accent" ng-show="!$ctrl.editable && !$ctrl.todo.done" ng-click="$ctrl.updateEditable()">Edit</md-button>
+        <md-button class="md-accent" ng-show="$ctrl.editable && !$ctrl.todo.done" ng-click="$ctrl.saveTodo()">Save</md-button>
+        <md-button class="md-accent" ng-show="$ctrl.todo.done" ng-click="$ctrl.removeTodo()">Delete</md-button>
+    </span>
+</md-list-item>
