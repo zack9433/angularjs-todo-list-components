@@ -3,9 +3,7 @@ export const TodoListComponent = {
     templateUrl: './components/todo-list/view.html',
     bindings: {
         todos: '<',
-        onUpdateCallback: '&',
-        onDoneCallback: '&',
-        onRemoveCallback: '&'
+        onUpdateCallback: '&'
     },
     controller: class TodoListController {
         /* @ngInject */
@@ -14,7 +12,6 @@ export const TodoListComponent = {
         }
 
         $onInit() {
-            this._console.log('TodoList initialized');
         }
     }
 };

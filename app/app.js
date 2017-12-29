@@ -7,18 +7,16 @@ import 'angular-animate';
 import 'angular-ui-router';
 import 'angular-sanitize';
 import 'services/services';
-import 'directives/directives';
 import 'components/todos';
-import { listReducer } from './components/statement/todo.list.reducer';
-import mainRoutes from 'components/main/main.routes';
+import { todoReducer } from './components/statement/todo.state.reducer';
+import mainRoutes from './components/main/main.routes';
 
 angular
     .module('angularjs-todo-list-components', [
         'ngMaterial',
         'ngResource',
-        'ui.router',
         'services',
-        'directives',
+        'ui.router',
         'ngSanitize',
         'ngRedux',
         'todos'
@@ -26,6 +24,6 @@ angular
     .config(mainRoutes)
     .config($ngReduxProvider => {
         $ngReduxProvider.createStoreWith({
-            listReducer: listReducer
-        }, [], [window.__REDUX_DEVTOOLS_EXTENSION__()]);
+            todoReducer: todoReducer
+        });
     });

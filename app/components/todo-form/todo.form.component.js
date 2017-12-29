@@ -11,7 +11,6 @@ export const TodoFormComponent = {
         }
 
         $onInit() {
-            this._console.log('TodoForm initialized');
         }
 
         addTodo() {

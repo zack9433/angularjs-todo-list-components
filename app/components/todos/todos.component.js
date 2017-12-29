@@ -1,5 +1,4 @@
-import * as todoActions from '../statement/todo.list.action';
-import { bindActionCreators } from 'redux';
+import getCurrentLinkFromRoute from 'angular-material';
 export const TodosComponent = {
     selector: 'todos',
     template: `
@@ -8,67 +7,33 @@ export const TodosComponent = {
                 <h1 class="text-center app-list-title">{{$ctrl.title}}</h1>
             </md-toolbar>
             <div class="container">
-            <todo-form add-todo-callback="$ctrl.addTodoToService($event)"></todo-form>
-            <todo-list todos="$ctrl.data.todos"
-                on-update-callback="$ctrl.updateText($event)"
-                on-done-callback="$ctrl.updateDone($event)"
-                on-remove-callback="$ctrl.removeTodoFromService($event)">
-            </todo-list>
+                <md-nav-bar md-selected-nav-item="currentNavItem">
+                    <md-nav-item ng-repeat="board in $ctrl.boards track by $index"
+                    md-nav-sref="board({boardId: '{{board.id}}'})" name="{{board.name}}">{{board.name}}</md-nav-item>
+                </md-nav-bar>
+                <ui-view></ui-view>
             </div>
     	</div>
     `,
     controller: class TodosController {
         /* @ngInject */
-        constructor($scope, $log, $ngRedux, TodoListService) {
+        constructor($scope, $log, TodoListService) {
             this.title = 'TodoApp';
             this._scope = $scope;
             this._console = $log;
-            this._redux = $ngRedux;
             this._service = TodoListService;
-        }
 
-        $onInit() {
-            // Bind actions with an object.
-            this.actionCreator = bindActionCreators(todoActions, this._redux.dispatch);
-            this.unsubscribe = this._redux.connect(
-                this.mapStateToThis,
-                this.actionCreator
-            )(this);
-
-            this._service.getAll().then(todos => {
-                this.actionCreator.loadTodos(todos);
+            this._scope.$on('$routeChangeSuccess', function(event, current) {
+                $scope.currentLink = getCurrentLinkFromRoute(current);
             });
         }
 
-        mapStateToThis(state) {
-            return {
-                data: state.listReducer
-            };
-        }
-
-        addTodoToService(event) {
-            const todo = {
-                id: this.data.todos.length + 1,
-                text: event.text,
-                done: false
-            };
-            this.actionCreator.addTodo(todo);
-            this._service.store(todo);
-        }
-
-        updateDone(event) {
-            this.actionCreator.updateTodoDone(event);
-            this._service.storeAllTodo(this.data.todos);
-        }
-
-        updateText(event) {
-            this.actionCreator.updateTodoText(event);
-            this._service.storeAllTodo(this.data.todos);
-        }
-
-        removeTodoFromService(event) {
-            this.actionCreator.removeTodo(event);
-            this._service.storeAllTodo(this.data.todos);
+        $onInit() {
+            this._service.fetchAllBoards().then(
+                 boards => {
+                     this.boards = boards;
+                 }
+             );
         }
     }
 };

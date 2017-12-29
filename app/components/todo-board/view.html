@@ -1,0 +1,6 @@
+<h2>{{$ctrl.board.name}}</h2>
+<todo-form add-todo-callback="$ctrl.addTodo($event)"></todo-form>
+<todo-list todos="$ctrl.board.todos"
+    on-update-callback="$ctrl.updateTodo($event)">
+</todo-list>
+

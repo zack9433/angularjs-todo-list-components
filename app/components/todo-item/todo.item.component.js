@@ -1,13 +1,12 @@
 import './todo.item.css';
+import * as TodoType from '../statement/todo.state.config';
 
 export const TodoItemComponent = {
     selector: 'todoItem',
     templateUrl: './components/todo-item/view.html',
     bindings: {
         todo: '<',
-        onUpdateCallback: '&',
-        onDoneCallback: '&',
-        onRemoveCallback: '&'
+        onUpdateCallback: '&'
     },
     controller: class TodoItemController {
         constructor($log) {
@@ -27,26 +26,27 @@ export const TodoItemComponent = {
             this.updateEditable();
             this.onUpdateCallback({
                 $event: {
-                    id: this.todo.id,
-                    text: this.todo.text
+                    type: TodoType.UPDATE_TODO_TEXT,
+                    todo: this.todo
                 }
             });
         }
 
         removeTodo() {
-            this.onRemoveCallback({
+            this.onUpdateCallback({
                 $event: {
-                    id: this.todo.id
+                    type: TodoType.REMOVE_TODO,
+                    todo: this.todo
                 }
             });
         }
 
         updateDone() {
-            this.isDone = !this.isDone;
-            this.onDoneCallback({
+            this.todo.done = !this.todo.done;
+            this.onUpdateCallback({
                 $event: {
-                    id: this.todo.id,
-                    done: this.isDone
+                    type: TodoType.UPDATE_TODO_DONE,
+                    todo: this.todo
                 }
             });
         }
