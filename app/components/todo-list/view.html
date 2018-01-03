@@ -1,0 +1,9 @@
+<p>Count: {{$ctrl.todos.length}}</p>
+<div class="col-xs-12 app-list-container" ng-show="$ctrl.todos.length > 0">
+    <md-list>
+        <todo-item ng-repeat="todo in $ctrl.todos track by $index"
+        todo="todo"
+        on-update-callback="$ctrl.onUpdateCallback({$event})"
+        ></todo-item>
+    </md-list>
+</div>

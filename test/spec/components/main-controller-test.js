@@ -15,6 +15,7 @@ describe('Main controller', () => {
     }));
 
     it('should set application name on controller', () => {
-        expect(ctrl.applicationName).toEqual('angularjs-todo-list-components')
+        expect(ctrl.applicationName).toEqual('angularjs-todo-list-components');
     });
 });
+

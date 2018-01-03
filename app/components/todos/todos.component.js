@@ -1,59 +1,39 @@
-import angular from 'angular';
-import {TodoFormComponent} from '../todo-form/todo-form.component';
-import {TodoListComponent} from '../todo-list/todo-list.component';
-
-const TodosComponent = {
-
+import getCurrentLinkFromRoute from 'angular-material';
+export const TodosComponent = {
     selector: 'todos',
     template: `
-        <div class="row">
-    		<h1 class="text-center">{{$ctrl.title}}</h1>
-            <todo-form on-new-element="$ctrl.addNewElement($event)"></todo-form>
-            <hr/>
-    		<todo-list todos="$ctrl.todoList" on-done="$ctrl.markDone($event)" on-undone="$ctrl.markUndone($event)"></todo-list>
+        <div layout="column" layout-fill>
+            <md-toolbar class="custom">
+                <h1 class="text-center app-list-title">{{$ctrl.title}}</h1>
+            </md-toolbar>
+            <div class="container">
+                <md-nav-bar md-selected-nav-item="currentNavItem">
+                    <md-nav-item ng-repeat="board in $ctrl.boards track by $index"
+                    md-nav-sref="board({boardId: '{{board.id}}'})" name="{{board.name}}">{{board.name}}</md-nav-item>
+                </md-nav-bar>
+                <ui-view></ui-view>
+            </div>
     	</div>
     `,
     controller: class TodosController {
-
         /* @ngInject */
-        constructor($log, TodoListService) {
-            this._console = $log;
+        constructor($scope, $log, TodoListService) {
             this.title = 'TodoApp';
+            this._scope = $scope;
+            this._console = $log;
             this._service = TodoListService;
-            this._service.getAll()
-                .then((todos) => this.todoList = todos);
+
+            this._scope.$on('$routeChangeSuccess', function(event, current) {
+                $scope.currentLink = getCurrentLinkFromRoute(current);
+            });
         }
 
         $onInit() {
-            this._console.log('Todos initialized');
-        }
-
-        addNewElement(todoLabel) {
-            const todo = {id: this.todoList.length + 1, text: todoLabel, done: false};
-            this._console.log(todo);
-            this._service.store(todo)
-                .then((t) => {
-                    this.todoList.push(t);
-                })
-                .catch(alert);
-        }
-
-        markDone(todo) {
-            todo.done = true;
-            this._service.update(todo);
-        }
-
-        markUndone(todo) {
-            todo.done = false;
-            this._service.update(todo);
+            this._service.fetchAllBoards().then(
+                 boards => {
+                     this.boards = boards;
+                 }
+             );
         }
     }
-
 };
-
-angular.module('todos', [])
-    .component(TodoFormComponent.selector, TodoFormComponent)
-    .component(TodoListComponent.selector, TodoListComponent)
-    .component(TodosComponent.selector, TodosComponent);
-
-

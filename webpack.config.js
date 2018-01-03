@@ -1,5 +1,5 @@
-var path = require('path');
-var webpack = require('webpack');
+const path = require('path');
+const webpack = require('webpack');
 
 module.exports = {
     entry: './app/app.js',
@@ -17,17 +17,27 @@ module.exports = {
         ],
         loaders: [
             {
-                test: /\.js$/,
+                test: /\.js$/, // test: Determine the files is js
                 loader: 'ng-annotate?add=true!babel',
                 exclude: /node_modules/
             },
             {
                 test: /.html$/,
-                loader: 'ngtemplate?relativeTo=' + __dirname +'/app!html?root=' + __dirname + '/app'
+                loader:
+                    'ngtemplate?relativeTo=' +
+                    __dirname +
+                    '/app!html?root=' +
+                    __dirname +
+                    '/app'
             },
             {
                 test: /\.scss$/,
-                loaders: ['style', 'css?root=' + __dirname + '/app', 'autoprefixer-loader?browsers=last 2 versions', 'sass'],
+                loaders: [
+                    'style',
+                    'css?root=' + __dirname + '/app',
+                    'autoprefixer-loader?browsers=last 2 versions',
+                    'sass'
+                ]
             },
             {
                 test: /\.png$/,
@@ -35,17 +45,20 @@ module.exports = {
             },
             {
                 test: /\.css$/,
-                loader: 'style-loader!css-loader'
+                loader: 'style-loader!css-loader' // use ! to chain loaders
             },
             {
                 test: /\.(ttf|eot|svg|woff(2)?)(\?[a-z0-9]+)?$/,
-                loader: 'file-loader',
+                loader: 'file-loader'
             }
         ]
     },
     plugins: [
         new webpack.optimize.DedupePlugin(),
-        new webpack.optimize.UglifyJsPlugin({ minimize: true, output: { comments: false }}),
+        new webpack.optimize.UglifyJsPlugin({
+            minimize: true,
+            output: { comments: false }
+        }),
         new webpack.ProvidePlugin({
             $: 'jquery',
             jQuery: 'jquery',
@@ -53,6 +66,7 @@ module.exports = {
         })
     ],
     resolve: {
+        // easy way to require a file without 檔名
         root: path.resolve('app/'),
         extensions: ['', '.js']
     },
@@ -60,7 +74,7 @@ module.exports = {
         failOnError: true
     },
     sassLoader: {
-        includePaths: [path.resolve(__dirname, "./app")]
+        includePaths: [path.resolve(__dirname, './app')]
     },
     devtool: '#source-map'
 };
