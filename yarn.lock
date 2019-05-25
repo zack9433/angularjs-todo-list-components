@@ -97,6 +97,18 @@ amdefine@>=0.0.4:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/amdefine/-/amdefine-1.0.1.tgz#4a5282ac164729e93619bcfd3ad151f817ce91f5"
 
+angular-animate@1.5.10:
+  version "1.5.10"
+  resolved "https://registry.yarnpkg.com/angular-animate/-/angular-animate-1.5.10.tgz#7bfd4fb035ace40f9c5a22dbbd3e174ee5fa0032"
+
+angular-aria@^1.6.8:
+  version "1.6.8"
+  resolved "https://registry.yarnpkg.com/angular-aria/-/angular-aria-1.6.8.tgz#f5dfcdd69c0dddcb8b691749285613caa7e6cca5"
+
+angular-material@^1.1.5:
+  version "1.1.5"
+  resolved "https://registry.yarnpkg.com/angular-material/-/angular-material-1.1.5.tgz#a5450cd8205e15a7691edc389476094cf86d592b"
+
 angular-mocks@1.5.8:
   version "1.5.8"
   resolved "https://registry.yarnpkg.com/angular-mocks/-/angular-mocks-1.5.8.tgz#2e9399056669f286a681396bc35ae0d7c5c70d16"
